@@ -1,84 +1,244 @@
-import { motion } from "framer-motion"
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
+import {
+  Brain,
+  Code2,
+  Database,
+  Wrench,
+  Terminal,
+  Cpu,
+} from "lucide-react"
 
 const skillCategories = [
   {
     label: "Machine Learning & AI",
     color: "#c8b4ff",
-    skills: ["Python", "Scikit-learn", "TensorFlow", "PyTorch", "CNNs", "ANNs", "LSTM", "SHAP", "LIME", "EDA"],
+    icon: Brain,
+    skills: [
+      "Python",
+      "Scikit-learn",
+      "TensorFlow",
+      "PyTorch",
+      "CNNs",
+      "ANNs",
+      "LSTM",
+      "SHAP",
+      "EDA",
+      "Deep Learning",
+      "Computer Vision",
+    ],
   },
   {
     label: "Full-Stack Development",
     color: "#7ee8c4",
-    skills: ["React.js", "Node.js", "Express.js", "MongoDB", "ASP.NET 8 Blazor", "Entity Framework Core", "Flask", "FastAPI", "Streamlit"],
+    icon: Code2,
+    skills: [
+      "React.js",
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "ASP.NET 8 Blazor",
+      "Entity Framework Core",
+      "REST APIs",
+      "JavaScript (ES6+)",
+      "HTML/CSS",
+    ],
   },
   {
     label: "Data Engineering",
     color: "#f0a0d0",
-    skills: ["Hopsworks", "PostgreSQL", "MS SQL Server", "MongoDB", "AWS", "SQL Validation", "Looker Studio"],
+    icon: Database,
+    skills: [
+      "Hopsworks",
+      "PostgreSQL",
+      "MS SQL Server",
+      "AWS",
+      "SQL Validation",
+      "Looker Studio",
+      "Feature Engineering",
+    ],
   },
   {
-    label: "DevOps & Tools",
+    label: "DevOps & Deployment",
     color: "#ffd97d",
-    skills: ["GitHub Actions", "Git", "IIS Deployment", "Linux", "Streamlit", "Flask", "FastAPI"],
+    icon: Wrench,
+    skills: [
+      "Docker",
+      "CI/CD",
+      "GitHub Actions",
+      "Git",
+      "Linux",
+      "Nginx",
+      "Vercel",
+      "Firebase",
+      "Streamlit",
+      "Hugging Face Spaces",
+      "IIS Deployment",
+    ],
+  },
+  {
+    label: "Embedded Systems & IoT",
+    color: "#ff8a65",
+    icon: Cpu,
+    skills: [
+      "ESP32 Microcontroller",
+      "Arduino",
+      "AD8232 ECG Sensor",
+      "Ultrasonic (Sonar) Sensors",
+      "IoT Systems",
+      "Sensor Data Acquisition",
+      "Embedded C / Arduino Programming",
+      "Hardware Integration",
+    ],
   },
   {
     label: "Programming Languages",
     color: "#7eb8f0",
-    skills: ["Python", "JavaScript", "C++", "Java (OOP)", "PHP", "Assembly Language"],
+    icon: Terminal,
+    skills: ["Python", "JavaScript", "C++", "Java (OOP)", "PHP"],
   },
 ]
 
+// 3D Card Component
+function SkillCard({ skill, color }) {
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+
+  const rotateX = useSpring(useTransform(y, [-50, 50], [10, -10]), {
+    stiffness: 150,
+    damping: 15,
+  })
+
+  const rotateY = useSpring(useTransform(x, [-50, 50], [-10, 10]), {
+    stiffness: 150,
+    damping: 15,
+  })
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const xVal = e.clientX - rect.left - rect.width / 2
+    const yVal = e.clientY - rect.top - rect.height / 2
+    x.set(xVal)
+    y.set(yVal)
+  }
+
+  const reset = () => {
+    x.set(0)
+    y.set(0)
+  }
+
+  return (
+    <motion.div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={reset}
+      style={{
+        rotateX,
+        rotateY,
+        transformPerspective: 900,
+      }}
+      whileHover={{ scale: 1.05 }}
+      className="relative h-[95px] rounded-2xl cursor-pointer"
+    >
+      {/* Glow */}
+      <div
+        className="absolute inset-0 rounded-2xl opacity-0 hover:opacity-100 transition"
+        style={{
+          background: `radial-gradient(circle at center, ${color}25, transparent 70%)`,
+        }}
+      />
+
+      {/* Card */}
+      <div
+        className="relative h-full w-full rounded-2xl border backdrop-blur-xl flex items-center gap-3 px-4"
+        style={{
+          background: "rgba(255,255,255,0.05)",
+          borderColor: "rgba(255,255,255,0.08)",
+        }}
+      >
+        {/* Left accent bar */}
+        <div
+          className="w-1 h-10 rounded-full"
+          style={{ background: color }}
+        />
+
+        {/* Skill text */}
+        <div>
+          <p className="text-white text-sm font-medium">{skill}</p>
+          <div
+            className="w-12 h-[2px] mt-1 rounded-full"
+            style={{ background: color }}
+          />
+        </div>
+
+        {/* Shine effect */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-20 hover:opacity-40 transition"
+          style={{
+            background:
+              "linear-gradient(120deg, transparent, rgba(255,255,255,0.08), transparent)",
+          }}
+        />
+      </div>
+    </motion.div>
+  )
+}
+
+// Main Section
 function Skills() {
   return (
-    <motion.section
-      id="skills"
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      viewport={{ once: true }}
-      className="w-full py-28 px-6 md:px-10"
-    >
-      <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+    <section className="w-full py-24 px-6 md:px-10 bg-[#0b0b10] text-white overflow-hidden">
 
-        <span className="block text-xs font-semibold tracking-widest uppercase mb-3" style={{ color: "var(--accent)" }}>
-          Technical Expertise
-        </span>
-        <h2 className="font-extrabold mb-3" style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2rem, 4vw, 3rem)", letterSpacing: "-0.01em" }}>
-          Skills
-        </h2>
-        <p className="font-light mb-12" style={{ color: "var(--muted)", fontSize: "1.05rem", maxWidth: "500px" }}>
-          A full-spectrum toolkit from model training to production deployment.
-        </p>
+      <div className="max-w-7xl mx-auto">
 
-        {skillCategories.map((cat) => (
-          <div key={cat.label} className="mb-10">
-            <div className="text-xs font-bold tracking-widest uppercase mb-4" style={{ color: "var(--muted)" }}>
-              {cat.label}
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-              {cat.skills.map((skill, si) => (
-                <motion.div
-                  key={skill}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: si * 0.05 }}
-                  viewport={{ once: true }}
-                  whileHover={{ y: -3 }}
-                  className="flex items-center gap-2.5 px-4 py-3.5 rounded-xl cursor-default transition-all duration-200"
-                  style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
-                  onMouseOver={e => e.currentTarget.style.borderColor = "var(--border2)"}
-                  onMouseOut={e => e.currentTarget.style.borderColor = "var(--border)"}
-                >
-                  <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: cat.color }} />
-                  <span className="text-sm font-medium" style={{ color: "#f0f0f4" }}>{skill}</span>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        ))}
+        {/* Header */}
+        <div className="mb-16">
+          <span className="text-xs tracking-[0.3em] uppercase text-gray-400">
+            Skills Engine
+          </span>
 
+          <h2 className="text-3xl md:text-4xl font-bold mt-2">
+            Skills & Technologies
+          </h2>
+
+          <p className="text-gray-400 mt-3 max-w-xl">
+            AI, Full-Stack, Data Engineering, DevOps, and Embedded Systems — a complete engineering stack.
+          </p>
+        </div>
+
+        {/* Categories */}
+        <div className="space-y-14">
+
+          {skillCategories.map((cat) => {
+            const CatIcon = cat.icon
+
+            return (
+              <div key={cat.label}>
+
+                {/* Category Title */}
+                <div className="flex items-center gap-3 mb-6">
+                  <CatIcon size={18} style={{ color: cat.color }} />
+                  <h3 className="text-lg font-semibold">
+                    {cat.label}
+                  </h3>
+                </div>
+
+                {/* Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+                  {cat.skills.map((skill) => (
+                    <SkillCard
+                      key={skill}
+                      skill={skill}
+                      color={cat.color}
+                    />
+                  ))}
+                </div>
+
+              </div>
+            )
+          })}
+
+        </div>
       </div>
-    </motion.section>
+    </section>
   )
 }
 

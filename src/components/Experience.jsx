@@ -31,6 +31,16 @@ const experience = [
       "Managed GitHub version control and handled IIS-based production deployment.",
     ],
   },
+
+  {
+    role: "Machine Learning Intern",
+    company: "Rhombix Technologies",
+    period: "April 2025 – July 2025",
+    points: [
+      "Trained various ML models on different datasets to predict outcomes and evaluate performance.",
+      "Each Task involved data preprocessing, model selection, training, and evaluation using metrics.",
+    ],
+  },
 ]
 
 function Experience() {
