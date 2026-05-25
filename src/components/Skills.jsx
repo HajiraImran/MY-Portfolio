@@ -185,7 +185,7 @@ function SkillCard({ skill, color }) {
 // Main Section
 function Skills() {
   return (
-    <section className="w-full py-24 px-6 md:px-10 bg-[#0b0b10] text-white overflow-hidden">
+<section id="skills" className="w-full py-24 px-6 md:px-10 bg-[#0b0b10] text-white overflow-hidden">
 
       <div className="max-w-7xl mx-auto">
 
